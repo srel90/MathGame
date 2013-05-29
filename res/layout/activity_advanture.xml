@@ -1,0 +1,117 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/TableLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/advanture_bg"
+    tools:context=".AdvantureActivity" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="20sp"
+        android:text="สนุกคิดพิชิตตัวเลข"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="คะแนน :"
+        android:textColor="#000000"
+        android:textSize="20sp"
+        tools:ignore="HardcodedText" />
+
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="10dp" >
+
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="xxx"
+            android:textColor="#0000FF"
+            android:textSize="25sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            tools:ignore="HardcodedText" />
+    </TableRow>
+
+    <GridView
+        android:id="@+id/GridView1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:numColumns="4" >
+
+    </GridView>
+
+    <TextView
+        android:id="@+id/answer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:text="xxx"
+        android:textColor="#0000FF"
+        android:textSize="25sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        tools:ignore="HardcodedText" />
+
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="10dp" >
+
+        <LinearLayout
+            android:id="@+id/LinearLayout01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+        </LinearLayout>
+    </TableRow>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <Button
+            android:id="@+id/ButtonNew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="เริ่มเกมส์ใหม่"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/ButtonEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="จบเกมส์"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btnstart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="วิธีเล่น" 
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+
+</TableLayout>

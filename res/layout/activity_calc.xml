@@ -1,0 +1,118 @@
+<TableLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/TableLayout01"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:background="@drawable/calc_bg"
+    tools:context=".CalcActivity" >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingBottom="10dp"
+        android:paddingTop="20sp"
+        android:text="คณิตคิดสนุก"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        android:textStyle="bold"
+        android:visibility="visible"
+        tools:ignore="HardcodedText" />
+
+    <TextView
+        android:id="@+id/score"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:text="คะแนน :"
+        android:textColor="#000000"
+        android:textSize="30sp"
+        tools:ignore="HardcodedText" />
+
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/question"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="20dp"
+            android:paddingTop="20sp"
+            android:text="xxx"
+            android:textColor="#000000"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            tools:ignore="HardcodedText" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:paddingBottom="40dp" >
+
+        <ProgressBar
+            android:id="@+id/progressBar1"
+            style="?android:attr/progressBarStyleHorizontal"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:max="30"
+            android:progress="30" />
+
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:gravity="center" >
+
+        <LinearLayout
+            android:id="@+id/LinearLayout01"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center" >
+
+        </LinearLayout>
+
+    </TableRow>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:paddingTop="20dp" >
+
+        <Button
+            android:id="@+id/ButtonNew"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="เริ่มเกมส์ใหม่"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/ButtonEnd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="จบเกมส์"
+            tools:ignore="HardcodedText" />
+
+        <Button
+            android:id="@+id/btnstart"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="วิธีเล่น" 
+            tools:ignore="HardcodedText" />
+
+    </LinearLayout>
+
+</TableLayout>
