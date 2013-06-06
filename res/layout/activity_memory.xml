@@ -6,46 +6,29 @@
     android:background="@drawable/memory_bg"
     tools:context=".MemoryActivity" >
 
-    <TableRow
-        android:id="@+id/tableRow1"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:gravity="center" >
-
-    </TableRow>
-
-    <TextView
-        android:id="@+id/score"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="คะแนน :"
-        android:textColor="#000000"
-        tools:ignore="HardcodedText" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:gravity="center"
-        android:paddingBottom="10dp"
-        android:paddingTop="20sp"
-        android:text="สูตรคูณหรรษา"
-        android:textColor="#000000"
-        android:textSize="30sp"
-        android:textStyle="bold"
-        android:visibility="visible"
-        tools:ignore="HardcodedText" />
-
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:gravity="center"
         android:orientation="vertical" >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="10dp"
+            android:paddingTop="20sp"
+            android:text="สูตรคูณหรรษา"
+            android:textColor="#000000"
+            android:textSize="30sp"
+            android:textStyle="bold"
+            android:visibility="visible"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/section"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_gravity="center"
             android:paddingBottom="10dp"
             android:text="ด่าน"
             android:textAppearance="?android:attr/textAppearanceLarge"
@@ -53,6 +36,27 @@
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
 
+        <TextView
+            android:id="@+id/score"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="คะแนน"
+            android:textColor="#000000"
+            tools:ignore="HardcodedText" />
+
+        <RatingBar
+            android:id="@+id/ratingBar1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="43dp"
+            android:layout_marginRight="43dp"
+            android:clickable="false"
+            android:longClickable="false"
+            android:max="5"
+            android:numStars="5"
+            android:rating="0.0"
+            android:stepSize="0.0" />
     </LinearLayout>
 
     <TableRow
@@ -61,6 +65,23 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center" >
+    </TableRow>
+
+    <TableRow
+        android:id="@+id/tableRow1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center" >
+
+        <TextView
+            android:id="@+id/timecount"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:text="30"
+            android:textColor="#FF0000"
+            android:textSize="30sp"
+            tools:ignore="HardcodedText" />
     </TableRow>
 
     <TableRow
@@ -83,7 +104,6 @@
             android:textStyle="bold"
             android:visibility="visible"
             tools:ignore="HardcodedText" />
-
     </TableRow>
 
     <LinearLayout
@@ -109,10 +129,8 @@
             android:id="@+id/btnstart"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="วิธีเล่น" 
+            android:text="วิธีเล่น"
             tools:ignore="HardcodedText" />
-      
-
     </LinearLayout>
 
 </TableLayout>

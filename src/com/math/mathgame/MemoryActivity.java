@@ -14,16 +14,21 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.RatingBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -34,15 +39,18 @@ public class MemoryActivity extends Activity {
 	private static int COL_COUNT = -1;
 	private Context context;
 	private int [] [] cards;
-	private int ans,round=2;
+	private int ans,round=2,time=29;
 	private Card firstCard;
 	ArrayList<Card> bb = new ArrayList<Card>();
 	private ButtonListener buttonListener;
 	private TableLayout mainTable;
 	private UpdateCardsHandler handler;
-	static long scoreN=0;
+	static int scoreN=0;
+	static float scoreS=0;
 	private boolean gamestart=false;
 	private drawTextToBitmap drawTextToBitmap=new drawTextToBitmap(); 
+	MyCount counter = new MyCount(30000,1000);
+	MediaPlayer mMediaBtnClick;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
@@ -53,15 +61,24 @@ public class MemoryActivity extends Activity {
         buttonListener = new ButtonListener();        
         mainTable = (TableLayout)findViewById(R.id.TableLayout01);       
         context  = mainTable.getContext();
+        
         newGame(4,3);
         ((Button)findViewById(R.id.btnstart)).setOnClickListener(new OnClickListener() {	
     		@Override
     		public void onClick(View v) {
+    			counter.cancel();
     			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);	
     			alertDialogBuilder.setTitle("วิธีการเล่น");
     			alertDialogBuilder
     			.setMessage("กดกดกดเข้าไป")
-    			.setCancelable(true); 
+    			.setCancelable(true)
+    			.setPositiveButton("ตกลง",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int id) {
+								counter.start();
+							}
+						});
     			AlertDialog alertDialog = alertDialogBuilder.create();			
     			alertDialog.show();    					
     		}		
@@ -78,9 +95,19 @@ public class MemoryActivity extends Activity {
    			Intent intent = new Intent(MemoryActivity.this,MainActivity.class);
    			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
    			startActivity(intent);   			
+            counter.cancel();
             finish();
    		}		
           });
+       ((RatingBar)findViewById(R.id.ratingBar1)).setOnTouchListener(new OnTouchListener() {		
+		@Override
+		public boolean onTouch(View v, MotionEvent event) {
+	        if (event.getAction() == MotionEvent.ACTION_UP) {
+	        	((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
+	        }
+	        return true;
+	    }
+       });
 
     }
     
@@ -98,6 +125,7 @@ public class MemoryActivity extends Activity {
     	final TextView score = ((TextView)findViewById(R.id.score));
     	section.setText("ด่าน :"+(round-1));
     	score.setText("คะแนน :"+(scoreN));
+    	((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
     	
     	question.setText("");
     	mainTable = new TableLayout(context);
@@ -107,7 +135,10 @@ public class MemoryActivity extends Activity {
     		 mainTable.addView(createRow(y));
           }
     	 
-    	firstCard=null; 	 
+    	firstCard=null; 
+    	time=29;
+    	counter.cancel();
+     	counter.start();
      	final Handler handler = new Handler();
      	handler.postDelayed(new Runnable(){
      		@Override
@@ -174,10 +205,16 @@ public class MemoryActivity extends Activity {
 				if(firstCard!=null){
 					return;
 				}
+				if(mMediaBtnClick != null){
+					mMediaBtnClick.release();
+		        }
+				mMediaBtnClick=MediaPlayer.create(MemoryActivity.this, R.raw.click);
+				mMediaBtnClick.start();
 				int id = v.getId();
 				int x = id/100;
 				int y = id%100;
 				turnCard((Button)v,x,y);
+				
 
 			
 		}
@@ -187,7 +224,7 @@ public class MemoryActivity extends Activity {
 			Bitmap bmp =drawTextToBitmap.draw(context,R.drawable.memory_front,String.valueOf(cards[x][y]),Color.YELLOW);
 			
 			button.setBackgroundDrawable(new BitmapDrawable(context.getResources(), bmp));
-
+			((TextView)findViewById(R.id.timecount)).setText("");
 			//Log.e("turnCard",String.valueOf(cards[x][y]));
 			
 				firstCard = new Card(button,x,y);
@@ -224,11 +261,12 @@ public class MemoryActivity extends Activity {
     	}
     	 public void checkCards(){
     		 //Log.i("checkCards()", "card["+(firstCard.x)+"]["+(firstCard.y)+"]="+cards[firstCard.x][firstCard.y] );
-    	    	if(ans == cards[firstCard.x][firstCard.y]){
-    				                   
-                    scoreN += scoreN+10*(2^round-2);
+    	    	if(ans == cards[firstCard.x][firstCard.y]){                  
+                    scoreN += 10;
+                    scoreS+=0.416;
                     final TextView score = ((TextView)findViewById(R.id.score));
                     score.setText("คะแนน :"+(scoreN));
+                    ((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
                     //Log.e("score",""+(score));
     				round++;   				
     				gamestart=false;
@@ -236,16 +274,18 @@ public class MemoryActivity extends Activity {
     				
     			}
     			else {
-    				
+    				((TextView)findViewById(R.id.timecount)).setText("ยังไม่ถูกต้อง");
     				firstCard.button.setBackgroundResource(R.drawable.memory_back);
     			}
     	    	
     	    	firstCard=null;
     			
     	    }
-    }
-    public void checkWin(){
+    } 
+    
+	public void checkWin(){
 		if(round>12){
+		counter.cancel();
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);	
 		alertDialogBuilder.setTitle("ยินดีด้วยคุณผ่านเกมนี้แล้ว");
 		alertDialogBuilder
@@ -280,5 +320,21 @@ public class MemoryActivity extends Activity {
 		}
 	}
 
+    public class MyCount extends CountDownTimer{
+    	public MyCount(long millisInFuture, long countDownInterval) {
+    	super(millisInFuture, countDownInterval);
+    	}
+    	@Override
+    	public void onFinish() {
+    		counter.cancel();
+    		((TextView)findViewById(R.id.timecount)).setText("");
+    	}
+    	@Override
+    	public void onTick(long millisUntilFinished) {
+    		time-=1;
+    		((TextView)findViewById(R.id.timecount)).setText(String.valueOf(time));
+    	}
+    	}
     
 }
+

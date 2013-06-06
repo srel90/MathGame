@@ -27,6 +27,15 @@ public class CalcHowtoActivity extends Activity {
 	            finish();
 	   		}		
 	          });
+		((Button)findViewById(R.id.ButtonEnd)).setOnClickListener(new OnClickListener() {	
+	   		@Override
+	   		public void onClick(View v) {
+	   			Intent intent = new Intent(CalcHowtoActivity.this,MainActivity.class);
+	   			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	   			startActivity(intent);
+	            finish();
+	   		}		
+	          });
 	}
 
 	@Override

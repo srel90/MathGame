@@ -9,21 +9,11 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context=".AdvantureHowtoActivity" >
 
-    <Button
-        android:id="@+id/btnstart"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="50dp"
-        android:text="เริ่มเกมส์"
-        tools:ignore="HardcodedText" />
-
     <TextView
         android:id="@+id/textView3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/textView1"
+        android:layout_below="@+id/timecount"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="18dp"
         android:text="TextView"
@@ -40,7 +30,7 @@
         android:textStyle="bold" />
 
     <TextView
-        android:id="@+id/textView1"
+        android:id="@+id/timecount"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/textView2"
@@ -48,6 +38,26 @@
         android:layout_marginTop="22dp"
         android:text="สนุกคิดพิชิตตัวเลข"
         android:textSize="24sp"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/ButtonEnd"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@+id/btnstart"
+        android:layout_alignBottom="@+id/btnstart"
+        android:layout_toRightOf="@+id/btnstart"
+        android:text="จบเกมส์"
+        tools:ignore="HardcodedText" />
+
+    <Button
+        android:id="@+id/btnstart"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/textView2"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="51dp"
+        android:text="เริ่มเกมส์"
         tools:ignore="HardcodedText" />
 
 </RelativeLayout>

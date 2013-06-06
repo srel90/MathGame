@@ -14,18 +14,22 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
@@ -36,16 +40,19 @@ public class CalcActivity extends Activity {
 	private static int COL_COUNT = -1;
 	private Context context;
 	private int [] [] cards;
-	private int ans,round=1,time=30;
+	private int ans,round=1;
+	private float time=100;
 	private Card firstCard;
 	ArrayList<Card> bb = new ArrayList<Card>();
 	private ButtonListener buttonListener;
 	private TableLayout mainTable;
 	private UpdateCardsHandler handler;
 	static long scoreN=0;
+	static float scoreS=0;
 	private boolean gamestart=false;
 	MyCount counter = new MyCount(30000,1000);
 	private drawTextToBitmap drawTextToBitmap=new drawTextToBitmap();
+	MediaPlayer mMediaBtnClick;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState); 
@@ -58,15 +65,24 @@ public class CalcActivity extends Activity {
         buttonListener = new ButtonListener();        
         mainTable = (TableLayout)findViewById(R.id.TableLayout01);       
         context  = mainTable.getContext();
+
         newGame(4,3);
         ((Button)findViewById(R.id.btnstart)).setOnClickListener(new OnClickListener() {	
     		@Override
     		public void onClick(View v) {
+    			counter.cancel();
     			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);	
     			alertDialogBuilder.setTitle("วิธีการเล่น");
     			alertDialogBuilder
     			.setMessage("กดกดกดเข้าไป")
-    			.setCancelable(true); 
+    			.setCancelable(true)
+    			.setPositiveButton("ตกลง",
+						new DialogInterface.OnClickListener() {
+							public void onClick(DialogInterface dialog,
+									int id) {
+								counter.start();
+							}
+						}); 
     			AlertDialog alertDialog = alertDialogBuilder.create();			
     			alertDialog.show();    					
     		}		
@@ -90,6 +106,15 @@ public class CalcActivity extends Activity {
             finish();
    		}		
           });
+       ((RatingBar)findViewById(R.id.ratingBar1)).setOnTouchListener(new OnTouchListener() {		
+   		@Override
+   		public boolean onTouch(View v, MotionEvent event) {
+   	        if (event.getAction() == MotionEvent.ACTION_UP) {
+   	        	((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
+   	        }
+   	        return true;
+   	    }
+          });
     }
     
     private void newGame(int c, int r) {
@@ -104,7 +129,7 @@ public class CalcActivity extends Activity {
     	final TextView question = ((TextView)findViewById(R.id.question));
     	final TextView score = ((TextView)findViewById(R.id.score));
     	score.setText("คะแนน :"+(scoreN));
-    	
+    	((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
     	question.setText("");
     	mainTable = new TableLayout(context);
     	tr.addView(mainTable);
@@ -116,7 +141,7 @@ public class CalcActivity extends Activity {
     	firstCard=null; 
     	question.setText(String.format( "%d x ? = %d", round,ans*round ));  	
      	gamestart=true;
-     	time=30;
+     	time=100;
      	counter.cancel();
      	counter.start();
      		
@@ -171,6 +196,11 @@ public class CalcActivity extends Activity {
 				if(firstCard!=null){
 					return;
 				}
+				if(mMediaBtnClick != null){
+					mMediaBtnClick.release();
+		        }
+				mMediaBtnClick=MediaPlayer.create(CalcActivity.this, R.raw.click);
+				mMediaBtnClick.start();
 				int id = v.getId();
 				int x = id/100;
 				int y = id%100;
@@ -185,7 +215,8 @@ public class CalcActivity extends Activity {
 			button.setBackgroundDrawable(new BitmapDrawable(context.getResources(), bmp));
 			final TextView question = ((TextView)findViewById(R.id.question));
             question.setText(String.format( "%d x %d = %d", round,cards[x][y],ans*round ));
-			Log.e("turnCard",String.valueOf(cards[x][y]));
+            ((TextView)findViewById(R.id.txtcorrect)).setText("");
+            //Log.e("turnCard",String.valueOf(cards[x][y]));
 			
 				firstCard = new Card(button,x,y);
 				TimerTask timetask = new TimerTask() {
@@ -214,6 +245,7 @@ public class CalcActivity extends Activity {
 
     public void checkWin(){
 		if(scoreN>=20){
+			counter.cancel();
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);	
 			alertDialogBuilder.setTitle("ยินดีด้วยคุณผ่านเกมนี้แล้ว");
 			alertDialogBuilder
@@ -235,7 +267,6 @@ public class CalcActivity extends Activity {
 	           			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	           			startActivity(intent);
 	                    dialog.cancel();
-	                    counter.cancel();
 	                    finish();
 		}
 		}); 
@@ -246,6 +277,7 @@ public class CalcActivity extends Activity {
 		}
 	}
     public void gameLose(){
+    	counter.cancel();
     	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);	
 		alertDialogBuilder.setTitle("หมดเวลา คุณทำคะแนนไปได้ "+scoreN);
 		alertDialogBuilder
@@ -257,7 +289,7 @@ public class CalcActivity extends Activity {
 						round=1;
 						scoreN=0;
 						gamestart=false;
-						newGame(5,2);
+						newGame(4,3);
 					}
 				})
 		.setNegativeButton("ไม่ใช้",
@@ -267,7 +299,6 @@ public class CalcActivity extends Activity {
 	           			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 	           			startActivity(intent);
 	           			dialog.cancel();
-	                    counter.cancel();
 	                    finish();
 					}
 				});
@@ -289,9 +320,10 @@ public class CalcActivity extends Activity {
     		 //Log.i("checkCards()", "card["+(firstCard.x)+"]["+(firstCard.y)+"]="+cards[firstCard.x][firstCard.y] );
     	    	if(ans == cards[firstCard.x][firstCard.y]){                 
                     scoreN +=2;
+                    scoreS +=0.5;
                     final TextView score = ((TextView)findViewById(R.id.score));
                     score.setText("คะแนน :"+(scoreN));
-                    
+                    ((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
                     //Log.e("score",""+(score));
     				round++;   				
     				gamestart=false;
@@ -306,6 +338,7 @@ public class CalcActivity extends Activity {
          	    	}
     				final TextView question = ((TextView)findViewById(R.id.question));
     	            question.setText(String.format( "%d x ? = %d", round,ans*round ));
+    	            ((TextView)findViewById(R.id.txtcorrect)).setText("ยังไม่ถูกต้อง");
     			}
     	    	
     	    	firstCard=null;
@@ -322,8 +355,7 @@ public class CalcActivity extends Activity {
         	}
         	@Override
         	public void onTick(long millisUntilFinished) {
-        		ProgressBar progressBar =((ProgressBar)findViewById(R.id.progressBar1));
-				progressBar.setProgress(time-=1);
+				((ProgressBar)findViewById(R.id.progressBar1)).setProgress((int)(time-=3.333333333333333));
         	}
         	}
         	

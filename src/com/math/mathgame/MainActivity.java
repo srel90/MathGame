@@ -1,7 +1,9 @@
 package com.math.mathgame;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
@@ -12,7 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 public class MainActivity extends Activity {
-	
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -25,6 +27,8 @@ public class MainActivity extends Activity {
         global.mMedia = MediaPlayer.create(this, R.raw.bgsound1);
         global.mMedia.setLooping(true);
         global.mMedia.start();
+        AudioManager audioManager = (AudioManager) getSystemService(Context.AUDIO_SERVICE);
+        audioManager.setStreamVolume(AudioManager.STREAM_MUSIC, 3, 0);
         
         Button btn1 = (Button) findViewById(R.id.btn1);
         Button btn2 = (Button) findViewById(R.id.btn2);
