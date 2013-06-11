@@ -39,14 +39,13 @@ public class MemoryActivity extends Activity {
 	private static int COL_COUNT = -1;
 	private Context context;
 	private int [] [] cards;
-	private int ans,round=2,time=29;
+	private int ans,round=1,time=30;
 	private Card firstCard;
 	ArrayList<Card> bb = new ArrayList<Card>();
 	private ButtonListener buttonListener;
 	private TableLayout mainTable;
 	private UpdateCardsHandler handler;
-	static int scoreN=0;
-	static float scoreS=0;
+	int scoreN=0;
 	private boolean gamestart=false;
 	private drawTextToBitmap drawTextToBitmap=new drawTextToBitmap(); 
 	MyCount counter = new MyCount(30000,1000);
@@ -103,7 +102,7 @@ public class MemoryActivity extends Activity {
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
 	        if (event.getAction() == MotionEvent.ACTION_UP) {
-	        	((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
+	        	((RatingBar)findViewById(R.id.ratingBar1)).setProgress(scoreN);
 	        }
 	        return true;
 	    }
@@ -122,10 +121,10 @@ public class MemoryActivity extends Activity {
     	tr.removeAllViews();
     	final TextView question = ((TextView)findViewById(R.id.question));
     	final TextView section = ((TextView)findViewById(R.id.section));
-    	final TextView score = ((TextView)findViewById(R.id.score));
-    	section.setText("´èÒ¹ :"+(round-1));
-    	score.setText("¤Ðá¹¹ :"+(scoreN));
-    	((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
+    	//final TextView score = ((TextView)findViewById(R.id.score));
+    	section.setText("´èÒ¹ :"+(round));
+    	//score.setText("¤Ðá¹¹ :"+(scoreN));
+    	((RatingBar)findViewById(R.id.ratingBar1)).setProgress(scoreN);
     	
     	question.setText("");
     	mainTable = new TableLayout(context);
@@ -136,7 +135,7 @@ public class MemoryActivity extends Activity {
           }
     	 
     	firstCard=null; 
-    	time=29;
+    	time=30;
     	counter.cancel();
      	counter.start();
      	final Handler handler = new Handler();
@@ -262,11 +261,11 @@ public class MemoryActivity extends Activity {
     	 public void checkCards(){
     		 //Log.i("checkCards()", "card["+(firstCard.x)+"]["+(firstCard.y)+"]="+cards[firstCard.x][firstCard.y] );
     	    	if(ans == cards[firstCard.x][firstCard.y]){                  
-                    scoreN += 10;
-                    scoreS+=0.416;
-                    final TextView score = ((TextView)findViewById(R.id.score));
-                    score.setText("¤Ðá¹¹ :"+(scoreN));
-                    ((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
+                    scoreN += 1;
+                    
+                    //final TextView score = ((TextView)findViewById(R.id.score));
+                    //score.setText("¤Ðá¹¹ :"+(scoreN));
+                    ((RatingBar)findViewById(R.id.ratingBar1)).setProgress(scoreN);
                     //Log.e("score",""+(score));
     				round++;   				
     				gamestart=false;
@@ -294,7 +293,7 @@ public class MemoryActivity extends Activity {
 		.setPositiveButton("ãªé",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,int id) {
-						round=2;
+						round=1;
 						scoreN=0;
 						gamestart=false;
 						newGame(4,3);

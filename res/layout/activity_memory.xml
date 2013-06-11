@@ -36,15 +36,6 @@
             android:textStyle="bold"
             tools:ignore="HardcodedText" />
 
-        <TextView
-            android:id="@+id/score"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:gravity="center"
-            android:text="คะแนน"
-            android:textColor="#000000"
-            tools:ignore="HardcodedText" />
-
         <RatingBar
             android:id="@+id/ratingBar1"
             android:layout_width="wrap_content"
@@ -56,7 +47,7 @@
             android:max="5"
             android:numStars="5"
             android:rating="0.0"
-            android:stepSize="0.0" />
+            android:stepSize="0" />
     </LinearLayout>
 
     <TableRow

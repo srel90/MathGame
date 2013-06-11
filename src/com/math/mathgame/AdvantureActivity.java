@@ -45,15 +45,14 @@ public class AdvantureActivity extends Activity {
 	private static int COL_COUNT = -1;
 	private Context context;
 	private int [] [] cards;
-	private int ans,item,peaces,round=2;
+	private int ans,item,peaces,round=1;
 	private Card firstCard;
 	private float time=100;
 	ArrayList<Card> bb = new ArrayList<Card>();
 	private ButtonListener buttonListener;
 	private TableLayout mainTable;
 	private UpdateCardsHandler handler;
-	static long scoreN=0;
-	static float scoreS=0;
+	int scoreN=0;
 	private List<Integer> fruitimages;
 	private drawTextToBitmap drawTextToBitmap=new drawTextToBitmap();
 	MediaPlayer mMediaBtnClick;
@@ -121,7 +120,7 @@ public class AdvantureActivity extends Activity {
       		@Override
       		public boolean onTouch(View v, MotionEvent event) {
       	        if (event.getAction() == MotionEvent.ACTION_UP) {
-      	        	((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
+      	        	((RatingBar)findViewById(R.id.ratingBar1)).setProgress(scoreN);
       	        }
       	        return true;
       	    }
@@ -141,11 +140,8 @@ public class AdvantureActivity extends Activity {
     	
     	TableRow tr = ((TableRow)findViewById(R.id.tableRow2));
     	tr.removeAllViews();
-    	
-    	
-    	final TextView score = ((TextView)findViewById(R.id.score));
-    	score.setText("คะแนน :"+(scoreN));    	
-    	((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
+   	
+    	((RatingBar)findViewById(R.id.ratingBar1)).setProgress(scoreN);
     	mainTable = new TableLayout(context);
     	tr.addView(mainTable);
     	loadImages();
@@ -274,7 +270,7 @@ public class AdvantureActivity extends Activity {
     
 
     public void checkWin(){
-		if(scoreN>=22){
+		if(scoreN>=12){
 			counter.cancel();
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);	
 			alertDialogBuilder.setTitle("ยินดีด้วยคุณผ่านเกมนี้แล้ว และได้คะแนน "+scoreN);
@@ -285,7 +281,7 @@ public class AdvantureActivity extends Activity {
 					new DialogInterface.OnClickListener() {
 						public void onClick(DialogInterface dialog,int id) {		
 							scoreN=0;
-							round=2;
+							round=1;
 							newGame(4,3);
 		}
 		})
@@ -315,7 +311,7 @@ public class AdvantureActivity extends Activity {
 		.setPositiveButton("ใช้",
 				new DialogInterface.OnClickListener() {
 					public void onClick(DialogInterface dialog,int id) {
-						round=2;
+						round=1;
 						scoreN=0;
 						newGame(4,3);
 					}
@@ -347,12 +343,9 @@ public class AdvantureActivity extends Activity {
 		public void checkCards(){
     		 //Log.i("checkCards()", "card["+(firstCard.x)+"]["+(firstCard.y)+"]="+cards[firstCard.x][firstCard.y] );
     	    	if(ans == cards[firstCard.x][firstCard.y]){                 
-                    scoreN +=2;
-                    scoreS +=0.5;
+                    scoreN +=1;
                     round++;
-                    final TextView score = ((TextView)findViewById(R.id.score));
-                    score.setText("คะแนน :"+(scoreN));
-                    ((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
+                    ((RatingBar)findViewById(R.id.ratingBar1)).setProgress(scoreN);
                     //Log.e("score",""+(score));  				
     				checkWin();   				
     				

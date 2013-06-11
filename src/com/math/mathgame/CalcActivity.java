@@ -47,8 +47,7 @@ public class CalcActivity extends Activity {
 	private ButtonListener buttonListener;
 	private TableLayout mainTable;
 	private UpdateCardsHandler handler;
-	static long scoreN=0;
-	static float scoreS=0;
+	int scoreN=0;
 	private boolean gamestart=false;
 	MyCount counter = new MyCount(30000,1000);
 	private drawTextToBitmap drawTextToBitmap=new drawTextToBitmap();
@@ -110,7 +109,7 @@ public class CalcActivity extends Activity {
    		@Override
    		public boolean onTouch(View v, MotionEvent event) {
    	        if (event.getAction() == MotionEvent.ACTION_UP) {
-   	        	((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
+   	        	((RatingBar)findViewById(R.id.ratingBar1)).setProgress(scoreN);
    	        }
    	        return true;
    	    }
@@ -127,9 +126,7 @@ public class CalcActivity extends Activity {
     	TableRow tr = ((TableRow)findViewById(R.id.tableRow2));
     	tr.removeAllViews();
     	final TextView question = ((TextView)findViewById(R.id.question));
-    	final TextView score = ((TextView)findViewById(R.id.score));
-    	score.setText("คะแนน :"+(scoreN));
-    	((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
+    	((RatingBar)findViewById(R.id.ratingBar1)).setProgress(scoreN);
     	question.setText("");
     	mainTable = new TableLayout(context);
     	tr.addView(mainTable);
@@ -138,7 +135,8 @@ public class CalcActivity extends Activity {
     		 mainTable.addView(createRow(y));
           }
     	 
-    	firstCard=null; 
+    	firstCard=null;
+    	((RatingBar)findViewById(R.id.ratingBar1)).setProgress(scoreN);
     	question.setText(String.format( "%d x ? = %d", round,ans*round ));  	
      	gamestart=true;
      	time=100;
@@ -244,7 +242,7 @@ public class CalcActivity extends Activity {
     
 
     public void checkWin(){
-		if(scoreN>=20){
+		if(scoreN>=12){
 			counter.cancel();
 			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);	
 			alertDialogBuilder.setTitle("ยินดีด้วยคุณผ่านเกมนี้แล้ว");
@@ -319,11 +317,8 @@ public class CalcActivity extends Activity {
 		public void checkCards(){
     		 //Log.i("checkCards()", "card["+(firstCard.x)+"]["+(firstCard.y)+"]="+cards[firstCard.x][firstCard.y] );
     	    	if(ans == cards[firstCard.x][firstCard.y]){                 
-                    scoreN +=2;
-                    scoreS +=0.5;
-                    final TextView score = ((TextView)findViewById(R.id.score));
-                    score.setText("คะแนน :"+(scoreN));
-                    ((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreS);
+                    scoreN +=1;
+                    ((RatingBar)findViewById(R.id.ratingBar1)).setRating(scoreN);
                     //Log.e("score",""+(score));
     				round++;   				
     				gamestart=false;

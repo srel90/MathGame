@@ -41,22 +41,12 @@
         tools:ignore="HardcodedText" />
 
     <Button
-        android:id="@+id/ButtonEnd"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/btnstart"
-        android:layout_alignBottom="@+id/btnstart"
-        android:layout_toRightOf="@+id/btnstart"
-        android:text="จบเกมส์"
-        tools:ignore="HardcodedText" />
-
-    <Button
         android:id="@+id/btnstart"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/textView2"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="51dp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="60dp"
         android:text="เริ่มเกมส์"
         tools:ignore="HardcodedText" />
 
