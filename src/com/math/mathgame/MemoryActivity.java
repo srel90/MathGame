@@ -70,9 +70,9 @@ public class MemoryActivity extends Activity {
         	((ToggleButton)findViewById(R.id.soundswitch)).setChecked(false);
         }
         if(round<=6){
-        newGame(3,2);
+        newGame(2,2);
         }else{
-        newGame(4,2);	
+        newGame(3,2);	
         }
         ((Button)findViewById(R.id.btnstart)).setOnClickListener(new OnClickListener() {	
     		@Override
@@ -99,9 +99,9 @@ public class MemoryActivity extends Activity {
 		@Override
 		public void onClick(View v) {
 			if(round<=6){
-		        newGame(3,2);
+		        newGame(2,2);
 		        }else{
-		        newGame(4,2);	
+		        newGame(3,2);	
 		        }			
 		}		
        });
@@ -188,11 +188,11 @@ public class MemoryActivity extends Activity {
     public ArrayList<Integer> randN(){
         ArrayList<Integer> numbers = new ArrayList<Integer>();
         if(round<=6){
-        for (int i = 1; i <= 6; i++) {
+        for (int i = 1; i <= 4; i++) {
         	numbers.add(i*round);
         }    
         }else{
-        	for (int i = 1; i <= 8; i++) {
+        	for (int i = 1; i <= 6; i++) {
             	numbers.add(i*round);
             }
         }
@@ -339,9 +339,9 @@ public class MemoryActivity extends Activity {
 						scoreN=0;
 						gamestart=false;
 						if(round<=6){
-					        newGame(3,2);
+					        newGame(2,2);
 					        }else{
-					        newGame(4,2);	
+					        newGame(3,2);	
 					        }
 					}
 				})
@@ -362,9 +362,9 @@ public class MemoryActivity extends Activity {
 	
 		}else{
 			if(round<=6){
-		        newGame(3,2);
+		        newGame(2,2);
 		        }else{
-		        newGame(4,2);	
+		        newGame(3,2);	
 		        }
 		}
 	}
@@ -412,9 +412,9 @@ public class MemoryActivity extends Activity {
 						scoreN=0;
 						gamestart=false;
 						if(round<=6){
-					        newGame(3,2);
+					        newGame(2,2);
 					        }else{
-					        newGame(4,2);	
+					        newGame(3,2);	
 					        }
 					}
 				})
