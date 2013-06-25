@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -28,10 +29,12 @@ import android.view.View.OnTouchListener;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 @SuppressLint("HandlerLeak")
 public class MemoryActivity extends Activity {
@@ -39,7 +42,7 @@ public class MemoryActivity extends Activity {
 	private static int COL_COUNT = -1;
 	private Context context;
 	private int [] [] cards;
-	private int ans,round=1,time=30;
+	private int ans,round=1,time=30,timeup=100;
 	private Card firstCard;
 	ArrayList<Card> bb = new ArrayList<Card>();
 	private ButtonListener buttonListener;
@@ -49,6 +52,7 @@ public class MemoryActivity extends Activity {
 	private boolean gamestart=false;
 	private drawTextToBitmap drawTextToBitmap=new drawTextToBitmap(); 
 	MyCount counter = new MyCount(30000,1000);
+	MyCount2 counter2 = new MyCount2(30000,1000);
 	MediaPlayer mMediaBtnClick;
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,12 +64,21 @@ public class MemoryActivity extends Activity {
         buttonListener = new ButtonListener();        
         mainTable = (TableLayout)findViewById(R.id.TableLayout01);       
         context  = mainTable.getContext();
-        
-        newGame(4,3);
+        if(global.clicked){
+        	((ToggleButton)findViewById(R.id.soundswitch)).setChecked(true);
+        }else{
+        	((ToggleButton)findViewById(R.id.soundswitch)).setChecked(false);
+        }
+        if(round<=6){
+        newGame(3,2);
+        }else{
+        newGame(4,2);	
+        }
         ((Button)findViewById(R.id.btnstart)).setOnClickListener(new OnClickListener() {	
     		@Override
     		public void onClick(View v) {
     			counter.cancel();
+    			counter2.cancel();
     			AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);	
     			alertDialogBuilder.setTitle("วิธีการเล่น");
     			alertDialogBuilder
@@ -85,7 +98,11 @@ public class MemoryActivity extends Activity {
        ((Button)findViewById(R.id.ButtonNew)).setOnClickListener(new OnClickListener() {	
 		@Override
 		public void onClick(View v) {
-			newGame(4,3);			
+			if(round<=6){
+		        newGame(3,2);
+		        }else{
+		        newGame(4,2);	
+		        }			
 		}		
        });
        ((Button)findViewById(R.id.ButtonEnd)).setOnClickListener(new OnClickListener() {	
@@ -95,9 +112,25 @@ public class MemoryActivity extends Activity {
    			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
    			startActivity(intent);   			
             counter.cancel();
+            counter2.cancel();
             finish();
    		}		
           });
+       ((ToggleButton)findViewById(R.id.soundswitch)).setOnClickListener(new OnClickListener() {	
+      		@Override
+      		public void onClick(View v) {
+      			if(!global.clicked){
+      				global.volumn=global.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+      				global.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+    						0, 0);
+      				global.clicked=true;
+      			}else{
+      				global.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+      						global.volumn, 0);
+      				global.clicked=false;
+      			}
+      		}		
+             });
        ((RatingBar)findViewById(R.id.ratingBar1)).setOnTouchListener(new OnTouchListener() {		
 		@Override
 		public boolean onTouch(View v, MotionEvent event) {
@@ -136,6 +169,8 @@ public class MemoryActivity extends Activity {
     	 
     	firstCard=null; 
     	time=30;
+    	timeup=100;
+    	((ProgressBar)findViewById(R.id.progressBar1)).setProgress((int)(timeup));
     	counter.cancel();
      	counter.start();
      	final Handler handler = new Handler();
@@ -152,9 +187,15 @@ public class MemoryActivity extends Activity {
 	}
     public ArrayList<Integer> randN(){
         ArrayList<Integer> numbers = new ArrayList<Integer>();
-        for (int i = 1; i <= 12; i++) {
+        if(round<=6){
+        for (int i = 1; i <= 6; i++) {
         	numbers.add(i*round);
-        }       
+        }    
+        }else{
+        	for (int i = 1; i <= 8; i++) {
+            	numbers.add(i*round);
+            }
+        }
         Collections.shuffle(numbers);      
         return numbers;
 	}
@@ -285,6 +326,7 @@ public class MemoryActivity extends Activity {
 	public void checkWin(){
 		if(round>12){
 		counter.cancel();
+		counter2.cancel();
 		AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);	
 		alertDialogBuilder.setTitle("ยินดีด้วยคุณผ่านเกมนี้แล้ว");
 		alertDialogBuilder
@@ -296,7 +338,11 @@ public class MemoryActivity extends Activity {
 						round=1;
 						scoreN=0;
 						gamestart=false;
-						newGame(4,3);
+						if(round<=6){
+					        newGame(3,2);
+					        }else{
+					        newGame(4,2);	
+					        }
 					}
 				})
 		.setNegativeButton("ไม่ใช้",
@@ -315,7 +361,11 @@ public class MemoryActivity extends Activity {
 			alertDialog.show();
 	
 		}else{
-			newGame(4,3);
+			if(round<=6){
+		        newGame(3,2);
+		        }else{
+		        newGame(4,2);	
+		        }
 		}
 	}
 
@@ -327,6 +377,7 @@ public class MemoryActivity extends Activity {
     	public void onFinish() {
     		counter.cancel();
     		((TextView)findViewById(R.id.timecount)).setText("");
+    		counter2.start();
     	}
     	@Override
     	public void onTick(long millisUntilFinished) {
@@ -334,6 +385,54 @@ public class MemoryActivity extends Activity {
     		((TextView)findViewById(R.id.timecount)).setText(String.valueOf(time));
     	}
     	}
+    public class MyCount2 extends CountDownTimer{
+    	public MyCount2(long millisInFuture, long countDownInterval) {
+    	super(millisInFuture, countDownInterval);
+    	}
+    	@Override
+    	public void onFinish() {
+    		gameLose();
+    	}
+    	@Override
+    	public void onTick(long millisUntilFinished) {
+			((ProgressBar)findViewById(R.id.progressBar1)).setProgress((int)(timeup-=3.333333333333333));
+    	}
+    	}
+    public void gameLose(){
+    	counter2.cancel();
+    	AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(context);	
+		alertDialogBuilder.setTitle("หมดเวลา คุณทำคะแนนไปได้ "+scoreN);
+		alertDialogBuilder
+		.setMessage("ต้องการเล่นต่อหรือไม่?")
+		.setCancelable(false)
+		.setPositiveButton("ใช้",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						round=1;
+						scoreN=0;
+						gamestart=false;
+						if(round<=6){
+					        newGame(3,2);
+					        }else{
+					        newGame(4,2);	
+					        }
+					}
+				})
+		.setNegativeButton("ไม่ใช้",
+				new DialogInterface.OnClickListener() {
+					public void onClick(DialogInterface dialog,int id) {
+						Intent intent = new Intent(MemoryActivity.this,MainActivity.class);
+	           			intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+	           			startActivity(intent);
+	           			dialog.cancel();
+	                    finish();
+					}
+				});
+
+			AlertDialog alertDialog = alertDialogBuilder.create();			
+			alertDialog.show();
+
+	}
     
 }
 

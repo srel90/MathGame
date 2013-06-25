@@ -113,14 +113,14 @@
             android:id="@+id/ButtonNew"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="เริ่มเกมส์ใหม่"
+            android:text="เริ่มใหม่"
             tools:ignore="HardcodedText" />
 
         <Button
             android:id="@+id/ButtonEnd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="จบเกมส์"
+            android:text="จบ"
             tools:ignore="HardcodedText" />
 
         <Button
@@ -128,6 +128,15 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="วิธีเล่น"
+            tools:ignore="HardcodedText" />
+
+        <ToggleButton
+            android:id="@+id/soundswitch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="ToggleButton"
+            android:textOff="ปิดเสียง"
+            android:textOn="เปิดเสียง"
             tools:ignore="HardcodedText" />
     </LinearLayout>
 

@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -33,6 +34,7 @@ import android.widget.RatingBar;
 import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 @SuppressLint("HandlerLeak")
 public class CalcActivity extends Activity {
@@ -64,7 +66,11 @@ public class CalcActivity extends Activity {
         buttonListener = new ButtonListener();        
         mainTable = (TableLayout)findViewById(R.id.TableLayout01);       
         context  = mainTable.getContext();
-
+        if(global.clicked){
+        	((ToggleButton)findViewById(R.id.soundswitch)).setChecked(true);
+        }else{
+        	((ToggleButton)findViewById(R.id.soundswitch)).setChecked(false);
+        }
         newGame(4,3);
         ((Button)findViewById(R.id.btnstart)).setOnClickListener(new OnClickListener() {	
     		@Override
@@ -105,6 +111,21 @@ public class CalcActivity extends Activity {
             finish();
    		}		
           });
+       ((ToggleButton)findViewById(R.id.soundswitch)).setOnClickListener(new OnClickListener() {	
+     		@Override
+     		public void onClick(View v) {
+     			if(!global.clicked){
+     				global.volumn=global.audioManager.getStreamVolume(AudioManager.STREAM_MUSIC);
+     				global.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+   						0, 0);
+     				global.clicked=true;
+     			}else{
+     				global.audioManager.setStreamVolume(AudioManager.STREAM_MUSIC,
+     						global.volumn, 0);
+     				global.clicked=false;
+     			}
+     		}		
+            });
        ((RatingBar)findViewById(R.id.ratingBar1)).setOnTouchListener(new OnTouchListener() {		
    		@Override
    		public boolean onTouch(View v, MotionEvent event) {
@@ -140,6 +161,7 @@ public class CalcActivity extends Activity {
     	question.setText(String.format( "%d x ? = %d", round,ans*round ));  	
      	gamestart=true;
      	time=100;
+     	((ProgressBar)findViewById(R.id.progressBar1)).setProgress((int)(time));
      	counter.cancel();
      	counter.start();
      		
